@@ -6,11 +6,11 @@
   (provide read-syntax))
 
 (define tokenize
-  (lexer
+  (lexer-srcloc
    [(:= 1 blank) (token 'SP lexeme #:skip? #t)]
-   [(:>= 2 blank) (token 'TAB lexeme)]
+   [(:= 2 blank) (token 'TAB lexeme)]
    [":" (token 'COLON lexeme)]
-   [(:seq "\"" alphabetic "\"") (token 'STRING lexeme)]
+   [(:seq "\"" (:+ alphabetic) "\"") (token 'STRING lexeme)]
    ["\n" (token 'NL lexeme)] 
    [(:+ alphabetic) (token 'ID (string->symbol lexeme))]
    ))
@@ -24,13 +24,13 @@
   (println #'ARG))
 
 (define (read-syntax src ip)
-  (define tokens (tokenize ip))
-  (println tokens)
-  
-  (define parse-tree (parse src tokens))
+  (port-count-lines! ip)
+  (lexer-file-path ip)
+
+  (define parse-tree (parse src (λ () (tokenize ip))))
   (println parse-tree)
 
   (strip-bindings
    (with-syntax ([PT parse-tree])
-     #'(module algebra-mod hatcher
+     #'(module hatcher-mod hatcher
          PT))))

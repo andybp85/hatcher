@@ -1,5 +1,5 @@
 #lang hatcher
 
 SomeDefinition
-    properties:
-        field: "value"
+  properties:
+    field: "value"
