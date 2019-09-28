@@ -1,5 +1,7 @@
 #lang brag
 
-top : NL* definition*
-definition : ID NL field+
-field : TAB+ ID COLON [ID | STRING | NL | FIELD]
+top : /NL* definition*
+definition : [QUALIFIER] ID /NL field+
+field : /TAB+ @kvpair /NL*
+kvpair : ID /COLON (@value | /NL field)
+value : (STRING | NUMBER)

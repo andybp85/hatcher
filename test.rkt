@@ -1,5 +1,10 @@
 #lang hatcher
 
-SomeDefinition
+main SomeDefinition
   properties:
-    field: "value"
+    afield: "value .2"
+
+OtherDefinition
+  properties:
+    afield: "value"
+  anotherProp: 2.2
