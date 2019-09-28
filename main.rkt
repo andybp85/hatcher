@@ -11,6 +11,8 @@
    "$schema" "http://json-schema.org/draft-07/schema#"
    "additionalProperties" #f))
 
+(define defs (hash))
+
 (define-lex-abbrev digits
   (:+ (char-set ".0123456789")))
 
@@ -21,6 +23,12 @@
    [":" (token 'COLON lexeme)]
    [(:seq "\"" (:+ alphabetic punctuation numeric " ") "\"")
     (token 'STRING lexeme)]
+   [(:seq "/" (:+ (:or alphabetic punctuation symbolic numeric " ")) "/")
+    (token 'REGEX lexeme)]
+;   [(:seq (:? (:or "." "..")) "/" (:+ (:or alphabetic numeric "-" "_" "/" "..")))
+;   [(:seq "/" (:+ (:or alphabetic numeric "-" "_")))
+   [(:seq "/" (:+ alphabetic))
+    (token 'PATH lexeme)]
    ["\n" (token 'NL lexeme)]
    [(:or "main" "category") (token 'QUALIFIER (string->symbol lexeme))]
    [(:+ alphabetic) (token 'ID (string->symbol lexeme))]
@@ -51,7 +59,7 @@
 
   (define parse-tree (parse src (λ () (tokenize ip))))
 ;  (println parse-tree)
-;  (println schema)
+  (println defs)
 
   (strip-bindings
    (with-syntax ([PT parse-tree])

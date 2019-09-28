@@ -1,8 +1,8 @@
 #lang hatcher
 
 main SomeDefinition
-  properties:
-    afield: "value .2"
+  patternProperties:
+    /^.+$/: /OtherDefinition
 
 OtherDefinition
   properties:
